@@ -1,0 +1,4 @@
+Django
+pillow
+python-decouple
+djangorestframework
