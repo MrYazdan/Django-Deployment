@@ -1,5 +1,3 @@
-#!/bin/bash
-
-set -e
+#!/bin/sh
 
 nginx-debug -g 'daemon off;'
