@@ -40,5 +40,31 @@ services:
       - "80:80"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./volumes/certbot/www/:/vol/www/
+      - ./volumes/certbot/conf/:/etc/letsencrypt/
     depends_on:
       - application
+  
+  certbot:
+    image: certbot/dns-cloudflare
+    container_name: certbot
+    volumes:
+      - ./volumes/certbot/www/:/vol/www/
+      - ./volumes/certbot/conf/:/etc/letsencrypt/
+      - ./nginx/cloudflare.ini:/etc/cloudflare/cloudflare.ini
+    entrypoint: "/bin/sh -c 'if [ ! -f /etc/letsencrypt/live/dev-help.ir/fullchain.pem ]; then \
+          echo \"No SSL found, requesting certificate...\"; \
+          certbot certonly --dns-cloudflare --force-renewal --rsa-key-size 4096 --noninteractive \
+          --dns-cloudflare-credentials /etc/cloudflare/cloudflare.ini --email ismryazdan@gmail.com \
+          --agree-tos --no-eff-email -w /vol/www/ -d dev-help.ir --preferred-challenges dns-01; \
+        else \
+          cert_file_time=$(stat -c %Y /etc/letsencrypt/live/dev-help.ir/fullchain.pem); \
+          current_time=$(date +%s); \
+          time_diff=$(( (current_time - cert_file_time) / 86400 )); \
+          if [ $$time_diff -ge 60 ]; then \
+            echo \"Certificate is older than 60 days, renewing...\"; \
+            certbot renew --dns-cloudflare --dns-cloudflare-credentials /etc/cloudflare/cloudflare.ini --quiet; \
+          else \
+            echo \"Certificate is still valid, no need to renew.\"; \
+          fi; \
+        fi;'"
