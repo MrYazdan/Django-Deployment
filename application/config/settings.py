@@ -1,4 +1,3 @@
-from email.policy import default
 from pathlib import Path
 from decouple import config
 
@@ -28,6 +27,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core'
 ]
 
 MIDDLEWARE = [
@@ -110,7 +110,9 @@ else:
     }
 
     # Cache
-    REDIS_URL = config("REDIS_URL")
+    REDIS_HOST = config("REDIS_HOST")
+    REDIS_PORT = config("REDIS_PORT")
+    REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}"
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.redis.RedisCache",
@@ -119,26 +121,26 @@ else:
     }
 
     # Security params:
-    SECURE_HSTS_SECONDS = 12 * 30 * 24 * 60 * 60
-    SECURE_HSTS_PRELOAD = True
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = "HTTP_X_FORWARDED_PROTO" ,"https"
-    USE_X_FORWARDED_HOST = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_REFERRER_POLICY = "strict-origin"
-    X_FRAME_OPTIONS = "SAMEORIGIN"
-    SESSION_COOKIE_AGE = 3 * 60 * 60
-    SESSION_TIMEOUT = 24 * 60 * 60
+    # SECURE_HSTS_SECONDS = 12 * 30 * 24 * 60 * 60
+    # SECURE_HSTS_PRELOAD = True
+    # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    # SECURE_SSL_REDIRECT = True
+    # SECURE_PROXY_SSL_HEADER = "HTTP_X_FORWARDED_PROTO" ,"https"
+    # USE_X_FORWARDED_HOST = True
+    # SESSION_COOKIE_SECURE = True
+    # CSRF_COOKIE_SECURE = True
+    # SECURE_REFERRER_POLICY = "strict-origin"
+    # X_FRAME_OPTIONS = "SAMEORIGIN"
+    # SESSION_COOKIE_AGE = 3 * 60 * 60
+    # SESSION_TIMEOUT = 24 * 60 * 60
 
     # CORS params
-    CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = config(
-        "ALLOWED_HOSTS",
-        cast=lambda hosts: hosts.split(','),
-        default="http://0.0.0.0:8000, http://localhost:8000"
-    )
+    # CORS_ALLOW_ALL_ORIGINS = False
+    # CORS_ALLOWED_ORIGINS = config(
+    #     "ALLOWED_HOSTS",
+    #     cast=lambda hosts: hosts.split(','),
+    #     default="http://0.0.0.0:8000, http://localhost:8000"
+    # )
 
 
 AUTH_PASSWORD_VALIDATORS = [
