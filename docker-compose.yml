@@ -39,12 +39,13 @@ services:
       - "443:443"
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./volumes/certbot/www/:/vol/www/
-      - ./volumes/certbot/conf/:/etc/letsencrypt/
+      - ./logs/nginx/:/var/log/nginx/  # Self
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf   # Self
+      - ./volumes/certbot/www/:/vol/www/   # SSL
+      - ./volumes/certbot/conf/:/etc/letsencrypt/   # SSL
     depends_on:
       - application
-  
+
   certbot:
     image: certbot/dns-cloudflare
     container_name: certbot

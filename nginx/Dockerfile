@@ -4,10 +4,10 @@ USER root
 
 RUN apk add --update openssl bash
 
-COPY ./default.conf /etc/nginx/conf.d/
-
-COPY entrypoint.sh /
+COPY ./default.conf /etc/nginx/
+COPY ./entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh
 
 CMD ["/entrypoint.sh"]
+
